@@ -8,11 +8,11 @@ int main()
     srand(time(NULL));
 
     int guess, tries, answer, min, max, difficulty;
+    const int MAX_TRIES = 5; // Added a constant for the limit
     char playAgain;
 
     do
     {
-
         tries = 0;
         min = 1;
 
@@ -29,15 +29,16 @@ int main()
 
         answer = (rand() % (max - min + 1)) + min;
 
+        printf("\nYou have %d attempts to find the number!\n", MAX_TRIES);
+
         do
         {
-            printf("Guess a number (%d - %d): ", min, max);
+            printf("\nAttempt %d/%d - Guess a number (%d - %d): ", tries + 1, MAX_TRIES, min, max);
 
             if (scanf("%d", &guess) != 1)
             {
                 printf("Invalid input! Please enter a number.\n");
-                while (getchar() != '\n')
-                    ;
+                while (getchar() != '\n');
                 continue;
             }
 
@@ -54,7 +55,16 @@ int main()
             else
             {
                 printf("\nCORRECT!\n");
-                printf("The answer was %d and it took %d attempts to guess.\n", answer, tries);
+                printf("The answer was %d and it took %d attempts.\n", answer, tries);
+                break; // Exit loop if they win
+            }
+
+            // Check if they ran out of tries
+            if (tries >= MAX_TRIES && guess != answer)
+            {
+                printf("\nLOST!! You've used all %d attempts.\n", MAX_TRIES);
+                printf("The correct number was: %d\n", answer);
+                break; // Exit loop if they lose
             }
 
         } while (guess != answer);
